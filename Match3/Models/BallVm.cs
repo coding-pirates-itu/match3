@@ -73,7 +73,8 @@ public sealed class BallVm : DependencyObject
 
     public static BallVm CreateItem(int x, int y)
     {
-        return new BallVm() { Coordinate = new Point(x, y), Type = BallTypes.Ball1 };
+        var type = (BallTypes) Random.Shared.Next((int)BallTypes.Ball1, (int)BallTypes.Ball5 + 1);
+        return new BallVm() { Coordinate = new Point(x, y), Type = type };
     }
 
     #endregion

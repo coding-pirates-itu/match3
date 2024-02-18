@@ -33,7 +33,6 @@
         <views:GameFieldView x:Name="Field"
                              Grid.Row="1"
                              Style="{StaticResource GameFieldStyle}"
-                             Background="#4c432a"
                              FieldWidth="{Binding Width}"
                              FieldHeight="{Binding Height}"
                              ItemsSource="{Binding Cells}"/>

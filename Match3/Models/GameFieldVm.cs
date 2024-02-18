@@ -9,7 +9,7 @@ public sealed class GameFieldVm : DependencyObject
 
     public static readonly DependencyProperty WidthProperty = DependencyProperty.Register(
         nameof(Width), typeof(int), typeof(GameFieldVm),
-        new PropertyMetadata(15));
+        new PropertyMetadata(12));
 
 
     public int Width

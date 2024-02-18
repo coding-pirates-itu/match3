@@ -3,7 +3,32 @@
                     xmlns:m="clr-namespace:Match3.Models">
 
     <DataTemplate x:Key="BallTemplate" DataType="m:ItemVm">
-        <Border Margin="4" Background="ForestGreen"/>
+        <Border x:Name="Ball" Margin="4" CornerRadius="20" BorderThickness="0">
+            <Border.Background>
+                <RadialGradientBrush RadiusX="0.5" RadiusY="0.5" Center="0.5, 0.5" GradientOrigin="0.25, 0.25">
+                    <GradientStop Offset="0" Color="White"/>
+                    <GradientStop Offset="1" Color="{Binding BorderBrush.(SolidColorBrush.Color), RelativeSource={RelativeSource AncestorType=Border}}"/>
+                </RadialGradientBrush>
+            </Border.Background>
+        </Border>
+
+        <DataTemplate.Triggers>
+            <DataTrigger Binding="{Binding Type}" Value="Ball1">
+                <Setter Property="BorderBrush" TargetName="Ball" Value="Green"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Type}" Value="Ball2">
+                <Setter Property="BorderBrush" TargetName="Ball" Value="Blue"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Type}" Value="Ball3">
+                <Setter Property="BorderBrush" TargetName="Ball" Value="#BBBB00"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Type}" Value="Ball4">
+                <Setter Property="BorderBrush" TargetName="Ball" Value="Red"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Type}" Value="Ball5">
+                <Setter Property="BorderBrush" TargetName="Ball" Value="#FF00FF"/>
+            </DataTrigger>
+        </DataTemplate.Triggers>
     </DataTemplate>
 </ResourceDictionary>
     

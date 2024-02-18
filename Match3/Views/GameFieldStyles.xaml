@@ -36,6 +36,7 @@
 
 
     <Style x:Key="GameFieldStyle" TargetType="v:GameFieldView">
+        <Setter Property="Background" Value="#FF170425"/>
         <Setter Property="ItemsPanel" Value="{DynamicResource CanvasPanel}"/>
         <Setter Property="ItemContainerStyle" Value="{DynamicResource ContainerStyle}"/>
         <Setter Property="ItemTemplate" Value="{DynamicResource BallTemplate}"/>
