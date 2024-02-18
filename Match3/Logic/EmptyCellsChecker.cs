@@ -16,10 +16,13 @@ public sealed class EmptyCellsChecker
         cells.StartBulk();
 
         for (var x = 0; x < cells.Dimension1; x++)
+        {
+            var nextToTakeFrom = default(int?);
+
             for (var y = cells.Dimension2 - 1;  y >= 0; y--)
                 if (cells.Get(x, y) is null)
                 {
-                    var takeFrom = y - 1;
+                    var takeFrom = nextToTakeFrom ?? y - 1;
                     while (takeFrom >= 0 && cells.Get(x, takeFrom) is null)
                         takeFrom--;
 
@@ -35,9 +38,11 @@ public sealed class EmptyCellsChecker
                         ball = BallVm.CreateItem(x, y);
                     }
 
+                    nextToTakeFrom = takeFrom - 1;
                     ball.Displacement = takeFrom - y;
                     cells.Set(x, y, ball);
                 }
+        }
 
         return cells.EndBulk();
     }

@@ -102,7 +102,7 @@ public sealed class GameFieldVm : DependencyObject
     public void NewGame()
     {
         Score = 0;
-        State = GameStates.CheckEmptyCells;
+        State = GameStates.Idle;
         Cells = BallCollection.Create(Width, Height);
     }
 

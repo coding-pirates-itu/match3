@@ -17,7 +17,8 @@ public interface IArray2D<T>
     /// <summary>
     /// Set an element by coordinates.
     /// </summary>
-    void Set(int coordinate1, int coordinate2, T? item);
+    /// <returns><see langword="true"/> if there was a change.</returns>
+    bool Set(int coordinate1, int coordinate2, T? item);
 
 
     /// <summary>

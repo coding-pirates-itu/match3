@@ -59,27 +59,39 @@ public sealed class BallCollection : DependencyObject, IEnumerable<BallVm>, INot
     public static BallCollection Create(int width, int height) => new(width, height);
 
 
+    /// <inheritdoc/>
     BallVm? IArray2D<BallVm>.Get(int coordinate1, int coordinate2) => mItems[coordinate1, coordinate2];
 
 
-    void IArray2D<BallVm>.Set(int coordinate1, int coordinate2, BallVm? item)
+    /// <inheritdoc/>
+    bool IArray2D<BallVm>.Set(int coordinate1, int coordinate2, BallVm? item)
     {
         var oldItem = mItems[coordinate1, coordinate2];
-        mItems[coordinate1, coordinate2] = item;
 
         if (oldItem != item)
         {
-            mBulkChanged = true;
+            mItems[coordinate1, coordinate2] = item;
+            
+            if (mBulkLevel > 0)
+            {
+                mBulkChanged = true;
+            }
+
+            return true;
         }
+
+        return false;
     }
 
 
+    /// <inheritdoc/>
     void IArray2D<BallVm>.StartBulk()
     {
         mBulkLevel++;
     }
 
 
+    /// <inheritdoc/>
     bool IArray2D<BallVm>.EndBulk()
     {
         mBulkLevel--;
@@ -95,6 +107,7 @@ public sealed class BallCollection : DependencyObject, IEnumerable<BallVm>, INot
     }
 
 
+    /// <inheritdoc/>
     IEnumerator<BallVm> IEnumerable<BallVm>.GetEnumerator()
     {
         for (var y = 0; y < Height; y++)
@@ -104,6 +117,7 @@ public sealed class BallCollection : DependencyObject, IEnumerable<BallVm>, INot
     }
 
 
+    /// <inheritdoc/>
     IEnumerator IEnumerable.GetEnumerator() => (this as IEnumerable<BallVm>).GetEnumerator();
 
     #endregion

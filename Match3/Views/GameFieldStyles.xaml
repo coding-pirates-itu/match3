@@ -1,15 +1,37 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:v="clr-namespace:Match3.Views">
+                    xmlns:v="clr-namespace:Match3.Views"
+                    xmlns:sys="clr-namespace:System;assembly=System.Runtime">
 
+    <v:BallCoordinateConverter x:Key="BallCoordinateConverter"/>
+    <sys:Double x:Key="Zero">0</sys:Double>
+    
+    
     <ItemsPanelTemplate x:Key="CanvasPanel">
-        <Canvas/>
+        <Canvas ClipToBounds="True"/>
     </ItemsPanelTemplate>
 
-
     <Style x:Key="ContainerStyle" TargetType="ContentPresenter">
-        <Setter Property="Control.Width" Value="{Binding CellWidth, RelativeSource={RelativeSource AncestorType=v:GameFieldView}}"/>
-        <Setter Property="Control.Height" Value="{Binding CellHeight, RelativeSource={RelativeSource AncestorType=v:GameFieldView}}"/>
+        <Setter Property="Control.Width" Value="{Binding CellSize, RelativeSource={RelativeSource AncestorType=v:GameFieldView}}"/>
+        <Setter Property="Control.Height" Value="{Binding CellSize, RelativeSource={RelativeSource AncestorType=v:GameFieldView}}"/>
+        <Setter Property="Canvas.Top">
+            <Setter.Value>
+                <MultiBinding Converter="{StaticResource BallCoordinateConverter}">
+                    <Binding Path="CellSize" RelativeSource="{RelativeSource AncestorType=v:GameFieldView}"/>
+                    <Binding Path="Coordinate.Y"/>
+                    <Binding Path="Displacement"/>
+                </MultiBinding>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Canvas.Left">
+            <Setter.Value>
+                <MultiBinding Converter="{StaticResource BallCoordinateConverter}">
+                    <Binding Path="CellSize" RelativeSource="{RelativeSource AncestorType=v:GameFieldView}"/>
+                    <Binding Path="Coordinate.X"/>
+                    <Binding Source="{StaticResource Zero}"/>
+                </MultiBinding>
+            </Setter.Value>
+        </Setter>
     </Style>
 
 

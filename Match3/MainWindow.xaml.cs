@@ -13,19 +13,21 @@ public partial class MainWindow : Window
 {
     #region Constants
 
-    private const int AnimationStepDurationMs = 50;
+    private const int AnimationStepDurationMs = 10;
 
-    private const double AnimationStep = 0.1;
+    private const double AnimationStep = 0.15;
 
     #endregion
 
 
     #region Fields
 
+    private DispatcherTimer mAnimationTimer = new();
+    
     private EmptyCellsChecker mEmptyCellsChecker = new();
 
-    private DispatcherTimer mAnimationTimer = new DispatcherTimer();
-    
+    private MatchChecker mMatchChecker = new();
+
     #endregion
 
 
@@ -39,7 +41,7 @@ public partial class MainWindow : Window
     public GameFieldVm Model
     {
         get => (GameFieldVm) GetValue(ModelProperty);
-        set => SetValue(ModelProperty, value);
+        private set => SetValue(ModelProperty, value);
     }
 
     #endregion
@@ -53,7 +55,7 @@ public partial class MainWindow : Window
         InitializeComponent();
         mAnimationTimer.Interval = TimeSpan.FromMilliseconds(AnimationStepDurationMs);
         mAnimationTimer.Tick += AnimationTimerTick;
-        Dispatcher.BeginInvoke(() => NewGameButtonClick(this, default), DispatcherPriority.ApplicationIdle);
+        NewGameButtonClick(this, default);
     }
 
     #endregion
@@ -65,33 +67,63 @@ public partial class MainWindow : Window
     {
         mAnimationTimer.Stop();
         Model.NewGame();
-        
-        if (mEmptyCellsChecker.CheckEmptyCells(Model.Cells))
-        {
-            Model.State = GameStates.Falling;
-            mAnimationTimer.Start();
-        }
-        else
-        {
-            Model.State = GameStates.Idle;
-        }
-
-        Field.InvalidateVisual();
+        InitiateAction(GameStateActions.CheckEmptyCells);
     }
 
     #endregion
 
 
-    #region Timer
+    #region States
+
+    private void InitiateAction(GameStateActions action) =>
+        Dispatcher.Invoke(() => InitiateActionUnsafe(action), DispatcherPriority.ApplicationIdle);
+
+
+    private void InitiateActionUnsafe(GameStateActions action)
+    {
+        mAnimationTimer.Stop();
+
+        switch (Model.State)
+        {
+            case GameStates.Idle:
+                switch (action)
+                {
+                    case GameStateActions.CheckEmptyCells:
+                        Model.State = GameStates.Falling;
+
+                        if (mEmptyCellsChecker.CheckEmptyCells(Model.Cells))
+                            mAnimationTimer.Start();
+                        else
+                            InitiateAction(GameStateActions.CheckMatches);
+                        break;
+                }
+                break;
+
+            case GameStates.Falling:
+                switch (action)
+                {
+                    case GameStateActions.CheckMatches:
+                        var deleted = mMatchChecker.CheckMatches(Model.Cells);
+                        if (deleted > 0)
+                        {
+                            Model.State = GameStates.Idle;
+                            Model.Score += deleted;
+                            InitiateAction(GameStateActions.CheckEmptyCells);
+                        }
+                        else
+                        {
+                            Model.State = GameStates.Idle;
+                        }
+
+                        break;
+                }
+                break;
+        }
+    }
+
 
     private void AnimationTimerTick(object? sender, EventArgs e)
     {
-        if (Model.State != GameStates.Falling)
-        {
-            mAnimationTimer.Stop();
-            return;
-        }
-
         var changed = false;
 
         foreach (var cell in Model.Cells)
@@ -106,7 +138,7 @@ public partial class MainWindow : Window
 
         if (!changed)
         {
-            Model.State = GameStates.Idle;
+            InitiateAction(GameStateActions.CheckMatches);
         }
     }
 

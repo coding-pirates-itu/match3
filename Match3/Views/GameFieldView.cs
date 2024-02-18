@@ -65,27 +65,6 @@ public sealed class GameFieldView : ItemsControl
     #endregion
 
 
-    #region Layout
-
-    protected override Size MeasureOverride(Size constraint)
-    {
-        foreach (var item in Items.OfType<BallVm>())
-        {
-            var el = ItemContainerGenerator.ContainerFromItem(item);
-            var x = (double) item.Coordinate.X * CellSize;
-            var y = (item.Coordinate.Y + item.Displacement) * CellSize;
-            el.SetValue(Canvas.LeftProperty, x);
-            el.SetValue(Canvas.TopProperty, y);
-
-            ((FrameworkElement) el).Measure(constraint);
-        }
-
-        return base.MeasureOverride(constraint);
-    }
-
-    #endregion
-
-
     #region Utility
 
     private static void SizeParameterChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
