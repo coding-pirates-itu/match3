@@ -26,16 +26,17 @@
         <Grid Grid.ColumnSpan="2">
             <TextBlock FontSize="24" FontWeight="Bold" HorizontalAlignment="Center"
                        Text="MATCH 3" />
-            <TextBlock FontSize="24" HorizontalAlignment="Right" Text="{Binding Points}"/>
+            <TextBlock FontSize="24" HorizontalAlignment="Right" Text="{Binding Score}"/>
             <Border Height="1" VerticalAlignment="Bottom" Background="Beige"/>
         </Grid>
 
-        <views:GameFieldView x:Name="Field" Grid.Row="1"
-                             Background="#4c432a"
+        <views:GameFieldView x:Name="Field"
+                             Grid.Row="1"
                              Style="{StaticResource GameFieldStyle}"
-                         FieldWidth="{Binding Width}"
-                         FieldHeight="{Binding Height}"
-                         ItemsSource="{Binding Items}"/>
+                             Background="#4c432a"
+                             FieldWidth="{Binding Width}"
+                             FieldHeight="{Binding Height}"
+                             ItemsSource="{Binding Cells}"/>
 
         <DockPanel Grid.Column="1" Grid.Row="1" LastChildFill="False">
             <TextBlock DockPanel.Dock="Top">
@@ -45,7 +46,7 @@
                 <Run Text="{Binding Height}"/>
             </TextBlock>
 
-            <Button DockPanel.Dock="Bottom" Click="NewGameButtonClick">New game</Button>
+            <Button DockPanel.Dock="Bottom" Margin="2" Click="NewGameButtonClick">New game</Button>
         </DockPanel>
     </Grid>
 </Window>

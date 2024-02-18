@@ -3,6 +3,7 @@
     public enum GameStates
     {
         Idle,
-        CheckEmptyCells
+        CheckEmptyCells,
+        Falling
     }
 }

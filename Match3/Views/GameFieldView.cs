@@ -11,7 +11,7 @@ public sealed class GameFieldView : ItemsControl
 
     public static readonly DependencyProperty FieldWidthProperty = DependencyProperty.
         Register(nameof(FieldWidth), typeof(int), typeof(GameFieldView),
-        new PropertyMetadata(20, SizeParameterChanged));
+        new PropertyMetadata(SizeParameterChanged));
 
 
     public int FieldWidth
@@ -27,7 +27,7 @@ public sealed class GameFieldView : ItemsControl
 
     public static readonly DependencyProperty FieldHeightProperty = DependencyProperty.
         Register(nameof(FieldHeight), typeof(int), typeof(GameFieldView),
-        new PropertyMetadata(20));
+        new PropertyMetadata(SizeParameterChanged));
 
 
     public int FieldHeight
@@ -39,33 +39,17 @@ public sealed class GameFieldView : ItemsControl
     #endregion
 
 
-    #region CellWidth dependency property
+    #region CellSize dependency property
 
-    public static readonly DependencyProperty CellWidthProperty = DependencyProperty.
-        Register(nameof(CellWidth), typeof(int), typeof(GameFieldView),
-        new PropertyMetadata(20));
+    public static readonly DependencyProperty CellSizeProperty = DependencyProperty.
+        Register(nameof(CellSize), typeof(int), typeof(GameFieldView),
+        new PropertyMetadata(40));
 
 
-    public int CellWidth
+    public int CellSize
     {
-        get => (int) GetValue(CellWidthProperty);
-        set => SetValue(CellWidthProperty, value);
-    }
-
-    #endregion
-
-
-    #region CellHeight dependency property
-
-    public static readonly DependencyProperty CellHeightProperty = DependencyProperty.
-        Register(nameof(CellHeight), typeof(int), typeof(GameFieldView),
-        new PropertyMetadata(20));
-
-
-    public int CellHeight
-    {
-        get => (int) GetValue(CellHeightProperty);
-        set => SetValue(CellHeightProperty, value);
+        get => (int) GetValue(CellSizeProperty);
+        set => SetValue(CellSizeProperty, value);
     }
 
     #endregion
@@ -88,8 +72,8 @@ public sealed class GameFieldView : ItemsControl
         foreach (var item in Items.OfType<BallVm>())
         {
             var el = ItemContainerGenerator.ContainerFromItem(item);
-            var x = (double) item.Coordinate.X * CellWidth;
-            var y = (item.Coordinate.Y + item.Displacement) * CellHeight;
+            var x = (double) item.Coordinate.X * CellSize;
+            var y = (item.Coordinate.Y + item.Displacement) * CellSize;
             el.SetValue(Canvas.LeftProperty, x);
             el.SetValue(Canvas.TopProperty, y);
 
@@ -107,8 +91,8 @@ public sealed class GameFieldView : ItemsControl
     private static void SizeParameterChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
         var self = (GameFieldView)d;
-        self.Width = self.CellWidth * self.FieldWidth;
-        self.Height = self.CellHeight * self.FieldHeight;
+        self.Width = self.CellSize * self.FieldWidth;
+        self.Height = self.CellSize * self.FieldHeight;
     }
 
     #endregion

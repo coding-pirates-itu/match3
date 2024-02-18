@@ -1,5 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using System.Windows;
+﻿using System.Windows;
 
 namespace Match3.Models;
 
@@ -10,13 +9,13 @@ public sealed class GameFieldVm : DependencyObject
 
     public static readonly DependencyProperty WidthProperty = DependencyProperty.Register(
         nameof(Width), typeof(int), typeof(GameFieldVm),
-        new PropertyMetadata(20));
+        new PropertyMetadata(15));
 
 
     public int Width
     {
         get => (int) GetValue(WidthProperty);
-        set => SetValue(WidthProperty, value);
+        private set => SetValue(WidthProperty, value);
     }
 
     #endregion
@@ -26,13 +25,13 @@ public sealed class GameFieldVm : DependencyObject
 
     public static readonly DependencyProperty HeightProperty = DependencyProperty.Register(
         nameof(Height), typeof(int), typeof(GameFieldVm),
-        new PropertyMetadata(20));
+        new PropertyMetadata(15));
 
 
     public int Height
     {
         get => (int) GetValue(HeightProperty);
-        set => SetValue(HeightProperty, value);
+        private set => SetValue(HeightProperty, value);
     }
 
     #endregion
@@ -41,14 +40,13 @@ public sealed class GameFieldVm : DependencyObject
     #region Cells dependency property
 
     public static readonly DependencyProperty CellsProperty = DependencyProperty.Register(
-        nameof(Cells), typeof(BallVm?[,]), typeof(GameFieldVm),
-        new PropertyMetadata(null));
+        nameof(Cells), typeof(BallCollection), typeof(GameFieldVm));
 
 
-    public BallVm?[,] Cells
+    public BallCollection Cells
     {
-        get => (BallVm?[,]) GetValue(CellsProperty);
-        set => SetValue(CellsProperty, value);
+        get => (BallCollection) GetValue(CellsProperty);
+        private set => SetValue(CellsProperty, value);
     }
 
     #endregion
@@ -90,7 +88,7 @@ public sealed class GameFieldVm : DependencyObject
 
     public GameFieldVm()
     {
-        Cells = new BallVm[Width, Height];
+        Cells = new(Width, Height);
     }
 
     #endregion
@@ -105,13 +103,8 @@ public sealed class GameFieldVm : DependencyObject
     {
         Score = 0;
         State = GameStates.CheckEmptyCells;
-        Cells = new BallVm[Width, Height];
+        Cells = BallCollection.Create(Width, Height);
     }
-
-    #endregion
-
-
-    #region Utility
 
     #endregion
 }

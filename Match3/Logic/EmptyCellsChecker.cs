@@ -11,33 +11,34 @@ public sealed class EmptyCellsChecker
     /// If nothing, add a new item and set <see cref="BallVm.Displacement"/> to -y.
     /// </summary>
     /// <return><see langword="true"/> if any modifications were made.</return>
-    public bool CheckEmptyCells(BallVm?[,] cells)
+    public bool CheckEmptyCells(IArray2D<BallVm> cells)
     {
-        var changed = false;
+        cells.StartBulk();
 
-        for (var x = 0; x < cells.GetLength(0); x++)
-            for (var y = cells.GetLength(1) - 1;  y >= 0; y--)
-                if (cells[x, y] is null)
+        for (var x = 0; x < cells.Dimension1; x++)
+            for (var y = cells.Dimension2 - 1;  y >= 0; y--)
+                if (cells.Get(x, y) is null)
                 {
                     var takeFrom = y - 1;
-                    while (takeFrom >= 0 && cells[x, takeFrom] is null)
+                    while (takeFrom >= 0 && cells.Get(x, takeFrom) is null)
                         takeFrom--;
 
-                    if (takeFrom >= 0 && cells[x, takeFrom] is not null)
+                    BallVm ball;
+                    if (takeFrom >= 0 && cells.Get(x, takeFrom) is not null)
                     {
-                        cells[x, y] = cells[x, takeFrom];
-                        cells[x, takeFrom] = null;
-                        cells[x, y]!.Coordinate = cells[x, y]!.Coordinate with { Y = y };
+                        ball = cells.Get(x, takeFrom)!;
+                        ball.Coordinate = ball.Coordinate with { Y = y };
+                        cells.Set(x, takeFrom, null);
                     }
                     else
                     {
-                        cells[x, y] = BallVm.CreateItem(x, y);
+                        ball = BallVm.CreateItem(x, y);
                     }
 
-                    cells[x, y]!.Displacement = takeFrom - y;
-                    changed = true;
+                    ball.Displacement = takeFrom - y;
+                    cells.Set(x, y, ball);
                 }
 
-        return changed;
+        return cells.EndBulk();
     }
 }
