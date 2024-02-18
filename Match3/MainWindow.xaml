@@ -11,7 +11,7 @@
         Height="450" Width="550">
 
     <Grid DataContext="{Binding Model, RelativeSource={RelativeSource AncestorType=local:MainWindow}}"
-          Background="#262215" TextBlock.Foreground="Beige" TextBlock.FontSize="18">
+          Background="#FF0C0612" TextBlock.Foreground="Beige" TextBlock.FontSize="18">
 
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -35,7 +35,8 @@
                              Style="{StaticResource GameFieldStyle}"
                              FieldWidth="{Binding Width}"
                              FieldHeight="{Binding Height}"
-                             ItemsSource="{Binding Cells}"/>
+                             ItemsSource="{Binding Cells}"
+                             MouseLeftButtonDown="FieldClickedHandler"/>
 
         <DockPanel Grid.Column="1" Grid.Row="1" LastChildFill="False">
             <TextBlock DockPanel.Dock="Top">

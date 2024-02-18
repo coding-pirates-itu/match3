@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Input;
 
 namespace Match3.Models;
 
@@ -74,6 +75,7 @@ public sealed class BallVm : DependencyObject
     public static BallVm CreateItem(int x, int y)
     {
         var type = (BallTypes) Random.Shared.Next((int)BallTypes.Ball1, (int)BallTypes.Ball5 + 1);
+
         return new BallVm() { Coordinate = new Point(x, y), Type = type };
     }
 

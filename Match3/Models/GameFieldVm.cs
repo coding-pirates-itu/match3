@@ -106,5 +106,25 @@ public sealed class GameFieldVm : DependencyObject
         Cells = BallCollection.Create(Width, Height);
     }
 
+
+    public BallVm? GetBall(int x, int y) =>
+        x < 0 ? null :
+        x >= Width ? null :
+        y < 0 ? null :
+        y >= Height ? null :
+        (Cells as IArray2D<BallVm>).Get(x, y);
+
+
+    public void Swap(BallVm ball1, BallVm ball2)
+    {
+        var c1 = ball2.Coordinate;
+        var c2 = ball1.Coordinate;
+        ball1.Coordinate = c1;
+        ball2.Coordinate = c2;
+
+        (Cells as IArray2D<BallVm>).Set(c1.X, c1.Y, ball1);
+        (Cells as IArray2D<BallVm>).Set(c2.X, c2.Y, ball2);
+    }
+
     #endregion
 }

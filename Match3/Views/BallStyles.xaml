@@ -1,32 +1,55 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:m="clr-namespace:Match3.Models">
+                    xmlns:m="clr-namespace:Match3.Models" xmlns:v="clr-namespace:Match3.Views">
 
-    <DataTemplate x:Key="BallTemplate" DataType="m:ItemVm">
-        <Border x:Name="Ball" Margin="4" CornerRadius="20" BorderThickness="0">
-            <Border.Background>
-                <RadialGradientBrush RadiusX="0.5" RadiusY="0.5" Center="0.5, 0.5" GradientOrigin="0.25, 0.25">
-                    <GradientStop Offset="0" Color="White"/>
-                    <GradientStop Offset="1" Color="{Binding BorderBrush.(SolidColorBrush.Color), RelativeSource={RelativeSource AncestorType=Border}}"/>
-                </RadialGradientBrush>
-            </Border.Background>
-        </Border>
+    <DataTemplate x:Key="BallTemplate" DataType="m:BallVm">
+        <Grid Margin="4,0,4,4">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="{Binding TopMargin, ElementName=Ball}"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <v:BallView x:Name="Ball" Grid.Row="1" CornerRadius="20" TopMargin="4">
+                <v:BallView.Background>
+                    <RadialGradientBrush RadiusX="0.5" RadiusY="0.5" Center="0.5, 0.5" GradientOrigin="0.25, 0.25">
+                        <GradientStop Offset="0" Color="White"/>
+                        <GradientStop Offset="1" Color="{Binding BaseColor, RelativeSource={RelativeSource AncestorType=v:BallView}}"/>
+                    </RadialGradientBrush>
+                </v:BallView.Background>
+            </v:BallView>
+        </Grid>
+
+        <DataTemplate.Resources>
+            <Storyboard x:Key="SelectedAnimation">
+                <DoubleAnimation Storyboard.TargetProperty="TopMargin" Storyboard.TargetName="Ball"
+                                 From="4" To="0" Duration="0:0:0.3" AutoReverse="True" RepeatBehavior="Forever"/>
+            </Storyboard>
+        </DataTemplate.Resources>
 
         <DataTemplate.Triggers>
             <DataTrigger Binding="{Binding Type}" Value="Ball1">
-                <Setter Property="BorderBrush" TargetName="Ball" Value="Green"/>
+                <Setter Property="BaseColor" TargetName="Ball" Value="Green"/>
             </DataTrigger>
             <DataTrigger Binding="{Binding Type}" Value="Ball2">
-                <Setter Property="BorderBrush" TargetName="Ball" Value="Blue"/>
+                <Setter Property="BaseColor" TargetName="Ball" Value="Blue"/>
             </DataTrigger>
             <DataTrigger Binding="{Binding Type}" Value="Ball3">
-                <Setter Property="BorderBrush" TargetName="Ball" Value="#BBBB00"/>
+                <Setter Property="BaseColor" TargetName="Ball" Value="#BBBB00"/>
             </DataTrigger>
             <DataTrigger Binding="{Binding Type}" Value="Ball4">
-                <Setter Property="BorderBrush" TargetName="Ball" Value="Red"/>
+                <Setter Property="BaseColor" TargetName="Ball" Value="Red"/>
             </DataTrigger>
             <DataTrigger Binding="{Binding Type}" Value="Ball5">
-                <Setter Property="BorderBrush" TargetName="Ball" Value="#FF00FF"/>
+                <Setter Property="BaseColor" TargetName="Ball" Value="#FF00FF"/>
+            </DataTrigger>
+
+            <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                <DataTrigger.EnterActions>
+                    <BeginStoryboard x:Name="SelectedAnimation" Storyboard="{StaticResource SelectedAnimation}"/>
+                </DataTrigger.EnterActions>
+                <DataTrigger.ExitActions>
+                    <StopStoryboard BeginStoryboardName="SelectedAnimation"/>
+                </DataTrigger.ExitActions>
             </DataTrigger>
         </DataTemplate.Triggers>
     </DataTemplate>

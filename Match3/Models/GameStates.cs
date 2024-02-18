@@ -3,6 +3,8 @@
     public enum GameStates
     {
         Idle,
-        Falling
+        Falling,
+        Selected,
+        Swapped
     }
 }
