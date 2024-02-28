@@ -3,5 +3,5 @@
 
 public record struct CellMatchInfo(
     int MatchedX, int MatchedY,
-    int XBall, int XLeft, int XRight,
-    int YBall, int YUp, int YDown);
+    int XClick, int XLeft, int XRight,
+    int YClick, int YUp, int YDown);

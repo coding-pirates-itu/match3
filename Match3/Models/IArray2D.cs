@@ -1,10 +1,20 @@
 ﻿namespace Match3.Models;
 
 
+/// <summary>
+/// A two-dimensional array.
+/// </summary>
 public interface IArray2D<T>
 {
+    /// <summary>
+    /// The number of elements in dimension 1.
+    /// </summary>
     int Dimension1 { get; }
 
+
+    /// <summary>
+    /// The number of elements in dimension 2.
+    /// </summary>
     int Dimension2 { get; }
 
 
