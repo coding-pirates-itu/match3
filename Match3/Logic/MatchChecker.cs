@@ -26,13 +26,13 @@ public sealed class MatchChecker
             if (m.MatchedX >= 3)
             {
                 for (var ix = m.XLeft; ix <= m.XRight; ix++)
-                    if (cells.Set(ix, m.YBall, null))
+                    if (cells.Set(ix, m.YClick, null))
                         deleted++;
             }
             if (m.MatchedY >= 3)
             {
                 for (var iy = m.YUp; iy <= m.YDown; iy++)
-                    if (cells.Set(m.XBall, iy, null))
+                    if (cells.Set(m.XClick, iy, null))
                         deleted++;
             }
         }
